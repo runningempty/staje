@@ -1,0 +1,8 @@
+{
+  "name": "Staje Platform",
+  "description": "A sophisticated showcase for mobile applications conceived by the Staje platform, highlighting features and providing direct access to Google Play and Apple App Store.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Outfit", sans-serif;
+  
+  --color-staje-primary: #6366f1; /* indigo-500 */
+  --color-staje-secondary: #0f172a; /* slate-900 */
+  --color-staje-accent: #06b6d4; /* cyan-500 */
+  --color-staje-bg: #020617; /* slate-950 */
+}
+
+@layer base {
+  body {
+    @apply bg-staje-bg text-slate-100 font-sans antialiased;
+  }
+}
+
+.glass-panel {
+  @apply bg-white/5 backdrop-blur-2xl border border-white/10;
+}
+
+.glass-card {
+  @apply bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 flex flex-col transition-all duration-300;
+}
+
+.staje-gradient {
+  @apply bg-gradient-to-br from-indigo-400 to-cyan-400;
+}
+
+.mesh-gradient-1 {
+  @apply absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-600/20 rounded-full blur-[120px] pointer-events-none;
+}
+
+.mesh-gradient-2 {
+  @apply absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-cyan-600/20 rounded-full blur-[120px] pointer-events-none;
+}

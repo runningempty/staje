@@ -1,0 +1,55 @@
+{
+  "entities": {
+    "siteConfig": {
+      "title": "Site Configuration",
+      "description": "Global settings for the Staje platform website",
+      "type": "object",
+      "properties": {
+        "heroTitle": { "type": "string" },
+        "heroSubtitle": { "type": "string" },
+        "contactEmail": { "type": "string" },
+        "primaryFont": { "type": "string" },
+        "displayFont": { "type": "string" }
+      },
+      "required": ["heroTitle", "heroSubtitle", "contactEmail"]
+    },
+    "app": {
+      "title": "App Definition",
+      "description": "Information about a mobile app conceived by the platform",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "features": { "type": "array", "items": { "type": "string" } },
+        "imageUrl": { "type": "string" },
+        "appleLink": { "type": "string" },
+        "googleLink": { "type": "string" },
+        "order": { "type": "number" }
+      },
+      "required": ["title", "description", "imageUrl"]
+    },
+    "admin": {
+      "title": "Admin",
+      "description": "Administrative user",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string" }
+      },
+      "required": ["email"]
+    }
+  },
+  "firestore": {
+    "/config/site": {
+      "schema": "siteConfig",
+      "description": "Single document for site-wide settings"
+    },
+    "/apps/{appId}": {
+      "schema": "app",
+      "description": "Collection of featured mobile apps"
+    },
+    "/admins/{uid}": {
+      "schema": "admin",
+      "description": "Collection of administrative users"
+    }
+  }
+}

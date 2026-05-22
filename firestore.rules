@@ -1,0 +1,72 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 1. Default Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // 2. Global Helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isEmailVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid)) ||
+        request.auth.token.email.lower() == 'zkhan@staje.com'
+      );
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    // 3. Entity Validations
+    function isValidApp(data) {
+      return data.keys().hasAll(['title', 'description', 'imageUrl']) &&
+             data.title is string && data.title.size() <= 100 &&
+             data.description is string && data.description.size() <= 1000 &&
+             data.imageUrl is string && data.imageUrl.size() <= 500 &&
+             (!('features' in data) || data.features is list) &&
+             (!('appleLink' in data) || data.appleLink is string) &&
+             (!('googleLink' in data) || data.googleLink is string) &&
+             (!('order' in data) || data.order is number);
+    }
+
+    function isValidSiteConfig(data) {
+      return data.keys().hasAll(['heroTitle', 'heroSubtitle', 'contactEmail']) &&
+             data.heroTitle is string && data.heroTitle.size() <= 100 &&
+             data.heroSubtitle is string && data.heroSubtitle.size() <= 1000 &&
+             data.contactEmail is string && data.contactEmail.size() <= 100;
+    }
+
+    // 4. Match Blocks
+    match /config/site {
+      allow read: if true;
+      allow write: if isAdmin() && isValidSiteConfig(incoming());
+    }
+
+    match /apps/{appId} {
+      allow read: if true;
+      allow get: if isValidId(appId);
+      allow create: if isAdmin() && isValidId(appId) && isValidApp(incoming()) &&
+                    incoming().keys().size() <= 8; // Adjust based on properties
+      allow update: if isAdmin() && isValidId(appId) && isValidApp(incoming());
+      allow delete: if isAdmin() && isValidId(appId);
+    }
+
+    match /admins/{uid} {
+      allow read: if isAdmin();
+      allow write: if false; // Only manageable via console for safety
+    }
+  }
+}
