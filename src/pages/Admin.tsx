@@ -23,6 +23,7 @@ export default function Admin() {
   const [localApps, setLocalApps] = useState<AppData[]>(apps);
   const [status, setStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState("");
+  const [activeTab, setActiveTab] = useState<'identity' | 'about' | 'social' | 'ecosystem'>('identity');
 
   useEffect(() => {
     setLocalConfig(config);
@@ -49,8 +50,6 @@ export default function Admin() {
       await setDoc(doc(db, 'config', 'site'), localConfig);
       
       // 2. Save Apps (Sync based on current state)
-      // Since we modified locally, we need to compare with remote
-      // A simpler way with Firestore is to just update what changed or add what's new
       for (const app of localApps) {
         await setDoc(doc(db, 'apps', app.id), app);
       }
@@ -139,6 +138,13 @@ export default function Admin() {
     );
   }
 
+  const tabs = [
+    { id: 'identity', label: 'Identity', icon: Type },
+    { id: 'about', label: 'Content', icon: Info },
+    { id: 'social', label: 'Social', icon: Globe },
+    { id: 'ecosystem', label: 'Ecosystem', icon: Plus },
+  ] as const;
+
   return (
     <div className="min-h-screen bg-staje-bg text-slate-100 p-6 md:p-12 relative overflow-hidden">
       <div className="mesh-gradient-1 opacity-50" />
@@ -199,313 +205,356 @@ export default function Admin() {
           </div>
         )}
 
-        <div className="grid lg:grid-cols-3 gap-12">
-          {/* Main Config */}
-          <div className="lg:col-span-1 space-y-8">
-            <section className="p-8 rounded-[32px] bg-white/5 border border-white/10 backdrop-blur-xl space-y-6">
-              <div className="flex items-center gap-3 mb-2">
-                <Type className="w-5 h-5 text-indigo-400" />
-                <h2 className="font-bold uppercase tracking-widest text-[10px] text-slate-500">Site Identity</h2>
-              </div>
-              
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Hero Title</label>
-                  <input
-                    type="text"
-                    value={localConfig.heroTitle}
-                    onChange={(e) => setLocalConfig({...localConfig, heroTitle: e.target.value})}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors placeholder:text-slate-700"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Hero Accent</label>
-                  <input
-                    type="text"
-                    value={localConfig.heroAccent}
-                    onChange={(e) => setLocalConfig({...localConfig, heroAccent: e.target.value})}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors text-indigo-400"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Hero Subtitle</label>
-                  <textarea
-                    rows={4}
-                    value={localConfig.heroSubtitle}
-                    onChange={(e) => setLocalConfig({...localConfig, heroSubtitle: e.target.value})}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors text-sm leading-relaxed"
-                  />
-                </div>
-              </div>
-            </section>
+        {/* Tabs Navigation */}
+        <div className="flex flex-wrap gap-2 mb-8 bg-white/5 p-1.5 rounded-2xl border border-white/10 w-fit">
+          {tabs.map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-all ${
+                activeTab === tab.id 
+                  ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20' 
+                  : 'text-slate-500 hover:text-slate-300 hover:bg-white/5'
+              }`}
+            >
+              <tab.icon className="w-4 h-4" />
+              {tab.label}
+            </button>
+          ))}
+        </div>
 
-            <section className="p-8 rounded-[32px] bg-white/5 border border-white/10 backdrop-blur-xl space-y-6">
-              <div className="flex items-center gap-3 mb-2">
-                <Mail className="w-5 h-5 text-cyan-400" />
-                <h2 className="font-bold uppercase tracking-widest text-[10px] text-slate-500">Contact & Typography</h2>
-              </div>
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Contact Email</label>
-                  <input
-                    type="email"
-                    value={localConfig.contactEmail}
-                    onChange={(e) => setLocalConfig({...localConfig, contactEmail: e.target.value})}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors"
-                  />
+        <div className="space-y-12">
+          {activeTab === 'identity' && (
+            <div className="grid md:grid-cols-2 gap-8">
+              <section className="p-8 rounded-[32px] bg-white/5 border border-white/10 backdrop-blur-xl space-y-6">
+                <div className="flex items-center gap-3 mb-2">
+                  <Type className="w-5 h-5 text-indigo-400" />
+                  <h2 className="font-bold uppercase tracking-widest text-[10px] text-slate-500">Hero Section</h2>
                 </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Display Font</label>
-                  <select
-                    value={localConfig.displayFont}
-                    onChange={(e) => setLocalConfig({...localConfig, displayFont: e.target.value})}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors appearance-none"
-                  >
-                    <option value="Outfit">Outfit (Modern)</option>
-                    <option value="Inter">Inter (Clean)</option>
-                    <option value="Space Grotesk">Space Grotesk (Tech)</option>
-                    <option value="Playfair Display">Playfair (Elegant)</option>
-                  </select>
-                </div>
-
-                <div className="space-y-4 pt-4 border-t border-white/5">
-                  <div className="flex items-center gap-3 mb-2">
-                    <ImageIcon className="w-5 h-5 text-indigo-400" />
-                    <h2 className="font-bold uppercase tracking-widest text-[10px] text-slate-500">Global Imagery</h2>
+                
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Main Title</label>
+                    <input
+                      type="text"
+                      value={localConfig.heroTitle}
+                      onChange={(e) => setLocalConfig({...localConfig, heroTitle: e.target.value})}
+                      className="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors"
+                    />
                   </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Accent Words</label>
+                    <input
+                      type="text"
+                      value={localConfig.heroAccent}
+                      onChange={(e) => setLocalConfig({...localConfig, heroAccent: e.target.value})}
+                      className="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors text-indigo-400"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Subtitle</label>
+                    <textarea
+                      rows={4}
+                      value={localConfig.heroSubtitle}
+                      onChange={(e) => setLocalConfig({...localConfig, heroSubtitle: e.target.value})}
+                      className="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors text-sm"
+                    />
+                  </div>
+                </div>
+              </section>
+
+              <section className="p-8 rounded-[32px] bg-white/5 border border-white/10 backdrop-blur-xl space-y-6">
+                 <div className="flex items-center gap-3 mb-2">
+                  <ImageIcon className="w-5 h-5 text-indigo-400" />
+                  <h2 className="font-bold uppercase tracking-widest text-[10px] text-slate-500">Visuals & Typography</h2>
+                </div>
+                <div className="space-y-6">
                   <ImageUploader 
-                    label="Hero Background" 
+                    label="Hero Background Image" 
                     currentUrl={localConfig.heroImageUrl} 
                     onUpload={(url) => setLocalConfig({...localConfig, heroImageUrl: url})} 
                     folder="hero"
                   />
-                </div>
-              </div>
-            </section>
-
-            <section className="p-8 rounded-[32px] bg-white/5 border border-white/10 backdrop-blur-xl space-y-6">
-              <div className="flex items-center gap-3 mb-2">
-                <Info className="w-5 h-5 text-emerald-400" />
-                <h2 className="font-bold uppercase tracking-widest text-[10px] text-slate-500">About Section</h2>
-              </div>
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Title</label>
-                  <input
-                    type="text"
-                    value={localConfig.aboutTitle || ''}
-                    onChange={(e) => setLocalConfig({...localConfig, aboutTitle: e.target.value})}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Subtitle</label>
-                  <textarea
-                    rows={3}
-                    value={localConfig.aboutSubtitle || ''}
-                    onChange={(e) => setLocalConfig({...localConfig, aboutSubtitle: e.target.value})}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors text-sm"
-                  />
-                </div>
-                
-                <div className="space-y-4 pt-4 border-t border-white/5">
-                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Vision Points</label>
-                  {localConfig.aboutItems?.map((item, idx) => (
-                    <div key={item.id} className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-3">
-                      <div className="flex gap-2">
-                        <input
-                          type="text"
-                          value={item.number}
-                          placeholder="01"
-                          onChange={(e) => {
-                            const newItems = [...(localConfig.aboutItems || [])];
-                            newItems[idx] = { ...item, number: e.target.value };
-                            setLocalConfig({ ...localConfig, aboutItems: newItems });
-                          }}
-                          className="w-12 bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-xs text-indigo-400 font-bold"
-                        />
-                        <input
-                          type="text"
-                          value={item.title}
-                          placeholder="Point Title"
-                          onChange={(e) => {
-                            const newItems = [...(localConfig.aboutItems || [])];
-                            newItems[idx] = { ...item, title: e.target.value };
-                            setLocalConfig({ ...localConfig, aboutItems: newItems });
-                          }}
-                          className="flex-1 bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-xs font-bold"
-                        />
-                      </div>
-                      <textarea
-                        rows={2}
-                        value={item.text}
-                        placeholder="Description..."
-                        onChange={(e) => {
-                          const newItems = [...(localConfig.aboutItems || [])];
-                          newItems[idx] = { ...item, text: e.target.value };
-                          setLocalConfig({ ...localConfig, aboutItems: newItems });
-                        }}
-                        className="w-full bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-xs text-slate-400"
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </section>
-
-            <section className="p-8 rounded-[32px] bg-white/5 border border-white/10 backdrop-blur-xl space-y-6">
-              <div className="flex items-center gap-3 mb-2">
-                <Globe className="w-5 h-5 text-cyan-400" />
-                <h2 className="font-bold uppercase tracking-widest text-[10px] text-slate-500">Footer & Social</h2>
-              </div>
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
-                    <Twitter className="w-3 h-3" /> Twitter URL
-                  </label>
-                  <input
-                    type="text"
-                    value={localConfig.footerTwitter || ''}
-                    onChange={(e) => setLocalConfig({...localConfig, footerTwitter: e.target.value})}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
-                    <Linkedin className="w-3 h-3" /> LinkedIn URL
-                  </label>
-                  <input
-                    type="text"
-                    value={localConfig.footerLinkedin || ''}
-                    onChange={(e) => setLocalConfig({...localConfig, footerLinkedin: e.target.value})}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
-                    <Github className="w-3 h-3" /> GitHub URL
-                  </label>
-                  <input
-                    type="text"
-                    value={localConfig.footerGithub || ''}
-                    onChange={(e) => setLocalConfig({...localConfig, footerGithub: e.target.value})}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
-                    <Copyright className="w-3 h-3" /> Copyright Text
-                  </label>
-                  <input
-                    type="text"
-                    value={localConfig.footerCopyright || ''}
-                    onChange={(e) => setLocalConfig({...localConfig, footerCopyright: e.target.value})}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors"
-                  />
-                </div>
-              </div>
-            </section>
-          </div>
-
-          {/* Apps Manager */}
-          <div className="lg:col-span-2 space-y-8">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-display font-bold tracking-tight">App Ecosystem</h2>
-              <button
-                onClick={addApp}
-                className="flex items-center gap-2 px-4 py-2 bg-indigo-500/10 border border-indigo-500/20 rounded-xl text-indigo-400 font-bold text-sm hover:bg-indigo-500/20 transition-all"
-              >
-                <Plus className="w-4 h-4" />
-                Add New App
-              </button>
-            </div>
-
-            <div className="space-y-6">
-              {localApps.map((app, index) => (
-                <div key={app.id} className="p-8 rounded-[32px] bg-white/5 border border-white/10 backdrop-blur-xl relative group/card overflow-hidden">
-                  <div className="absolute top-0 left-0 w-1 h-full bg-indigo-500/50 opacity-0 group-hover/card:opacity-100 transition-opacity" />
                   
-                  <div className="flex justify-between items-start mb-8">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center font-display font-bold text-indigo-400 border border-white/10">
-                        {index + 1}
-                      </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Display Typeface</label>
+                    <div className="relative">
+                      <select
+                        value={localConfig.displayFont}
+                        onChange={(e) => setLocalConfig({...localConfig, displayFont: e.target.value})}
+                        className="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors appearance-none"
+                      >
+                        <option value="Outfit">Outfit (Staje Default)</option>
+                        <option value="Inter">Inter (Swiss Minimal)</option>
+                        <option value="Space Grotesk">Space Grotesk (Neo-Future)</option>
+                        <option value="Playfair Display">Playfair (Editorial Serif)</option>
+                      </select>
+                      <Type className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Contact Gateway</label>
+                    <div className="relative">
+                      <input
+                        type="email"
+                        value={localConfig.contactEmail}
+                        onChange={(e) => setLocalConfig({...localConfig, contactEmail: e.target.value})}
+                        className="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors"
+                      />
+                      <Mail className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+          )}
+
+          {activeTab === 'about' && (
+             <div className="grid md:grid-cols-2 gap-8">
+                <section className="p-8 rounded-[32px] bg-white/5 border border-white/10 backdrop-blur-xl space-y-6 h-fit">
+                  <div className="flex items-center gap-3 mb-2">
+                    <Info className="w-5 h-5 text-emerald-400" />
+                    <h2 className="font-bold uppercase tracking-widest text-[10px] text-slate-500">Mission & Vision</h2>
+                  </div>
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Section Title</label>
                       <input
                         type="text"
-                        value={app.title}
-                        placeholder="App Title"
-                        onChange={(e) => updateAppField(app.id, 'title', e.target.value)}
-                        className="bg-transparent text-2xl font-display font-bold focus:outline-none border-b border-transparent focus:border-indigo-500/50"
+                        value={localConfig.aboutTitle}
+                        onChange={(e) => setLocalConfig({...localConfig, aboutTitle: e.target.value})}
+                        className="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors"
                       />
                     </div>
-                    <button
-                      onClick={() => removeApp(app.id)}
-                      className="p-2 text-slate-600 hover:text-rose-500 transition-colors"
-                    >
-                      <Trash2 className="w-5 h-5" />
-                    </button>
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Core Narrative</label>
+                      <textarea
+                        rows={6}
+                        value={localConfig.aboutSubtitle}
+                        onChange={(e) => setLocalConfig({...localConfig, aboutSubtitle: e.target.value})}
+                        className="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors text-sm"
+                      />
+                    </div>
                   </div>
+                </section>
 
-                  <div className="grid md:grid-cols-2 gap-8">
-                    <div className="space-y-6">
-                      <div className="space-y-2">
-                        <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Description</label>
+                <section className="p-8 rounded-[32px] bg-white/5 border border-white/10 backdrop-blur-xl space-y-6">
+                  <div className="flex items-center gap-3 mb-2">
+                    <Plus className="w-5 h-5 text-indigo-400" />
+                    <h2 className="font-bold uppercase tracking-widest text-[10px] text-slate-500">Vision Points (Three Core Values)</h2>
+                  </div>
+                  <div className="space-y-4">
+                    {localConfig.aboutItems?.map((item, idx) => (
+                      <div key={item.id} className="p-6 rounded-2xl bg-white/5 border border-white/10 space-y-4 relative group/item">
+                        <div className="flex justify-between items-center">
+                           <div className="flex items-center gap-3">
+                              <input
+                                type="text"
+                                value={item.number}
+                                onChange={(e) => {
+                                  const newItems = [...(localConfig.aboutItems || [])];
+                                  newItems[idx] = { ...item, number: e.target.value };
+                                  setLocalConfig({ ...localConfig, aboutItems: newItems });
+                                }}
+                                className="w-10 bg-white/10 border border-white/10 rounded-lg px-2 py-1 text-xs text-indigo-400 font-bold text-center"
+                              />
+                              <input
+                                type="text"
+                                value={item.title}
+                                onChange={(e) => {
+                                  const newItems = [...(localConfig.aboutItems || [])];
+                                  newItems[idx] = { ...item, title: e.target.value };
+                                  setLocalConfig({ ...localConfig, aboutItems: newItems });
+                                }}
+                                className="flex-1 bg-transparent font-bold border-b border-white/10 focus:border-indigo-500 transition-colors"
+                              />
+                           </div>
+                        </div>
                         <textarea
-                          rows={3}
-                          value={app.description}
-                          onChange={(e) => updateAppField(app.id, 'description', e.target.value)}
-                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors text-sm"
+                          rows={2}
+                          value={item.text}
+                          onChange={(e) => {
+                            const newItems = [...(localConfig.aboutItems || [])];
+                            newItems[idx] = { ...item, text: e.target.value };
+                            setLocalConfig({ ...localConfig, aboutItems: newItems });
+                          }}
+                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors text-xs text-slate-400"
                         />
                       </div>
-                      <div className="space-y-2">
-                        <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Features (One per line)</label>
-                        <textarea
-                          rows={4}
-                          value={app.features.join('\n')}
-                          onChange={(e) => updateAppField(app.id, 'features', e.target.value.split('\n'))}
-                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors text-sm font-mono"
+                    ))}
+                  </div>
+                </section>
+             </div>
+          )}
+
+          {activeTab === 'social' && (
+             <div className="grid md:grid-cols-2 gap-8">
+                <section className="p-8 rounded-[32px] bg-white/5 border border-white/10 backdrop-blur-xl space-y-6">
+                  <div className="flex items-center gap-3 mb-2">
+                    <Globe className="w-5 h-5 text-cyan-400" />
+                    <h2 className="font-bold uppercase tracking-widest text-[10px] text-slate-500">Social Connections</h2>
+                  </div>
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                        <Twitter className="w-3 h-3" /> X (Twitter)
+                      </label>
+                      <input
+                        type="text"
+                        value={localConfig.footerTwitter}
+                        onChange={(e) => setLocalConfig({...localConfig, footerTwitter: e.target.value})}
+                        className="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                        <Linkedin className="w-3 h-3" /> LinkedIn
+                      </label>
+                      <input
+                        type="text"
+                        value={localConfig.footerLinkedin}
+                        onChange={(e) => setLocalConfig({...localConfig, footerLinkedin: e.target.value})}
+                        className="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                        <Github className="w-3 h-3" /> GitHub
+                      </label>
+                      <input
+                        type="text"
+                        value={localConfig.footerGithub}
+                        onChange={(e) => setLocalConfig({...localConfig, footerGithub: e.target.value})}
+                        className="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors"
+                      />
+                    </div>
+                  </div>
+                </section>
+
+                <section className="p-8 rounded-[32px] bg-white/5 border border-white/10 backdrop-blur-xl space-y-6">
+                  <div className="flex items-center gap-3 mb-2">
+                    <Copyright className="w-5 h-5 text-slate-500" />
+                    <h2 className="font-bold uppercase tracking-widest text-[10px] text-slate-500">Global Footer</h2>
+                  </div>
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Copyright Notice</label>
+                      <input
+                        type="text"
+                        value={localConfig.footerCopyright}
+                        onChange={(e) => setLocalConfig({...localConfig, footerCopyright: e.target.value})}
+                        className="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors"
+                      />
+                    </div>
+                    <p className="text-[10px] text-slate-500 leading-relaxed uppercase tracking-tighter pt-4">
+                      Changes to the social URLs will immediately update the floating footer icons on the public site.
+                    </p>
+                  </div>
+                </section>
+             </div>
+          )}
+
+          {activeTab === 'ecosystem' && (
+            <div className="space-y-8">
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-display font-bold tracking-tight">App Integrated Assets</h2>
+                <button
+                  onClick={addApp}
+                  className="flex items-center gap-2 px-4 py-2 bg-indigo-500/10 border border-indigo-500/20 rounded-xl text-indigo-400 font-bold text-sm hover:bg-indigo-500/20 transition-all font-display"
+                >
+                  <Plus className="w-4 h-4" />
+                  Conceive New App
+                </button>
+              </div>
+
+              <div className="space-y-6">
+                {localApps.map((app, index) => (
+                  <div key={app.id} className="p-8 rounded-[32px] bg-white/5 border border-white/10 backdrop-blur-xl relative group/card overflow-hidden">
+                    <div className="absolute top-0 left-0 w-1 h-full bg-indigo-500/50 opacity-0 group-hover/card:opacity-100 transition-opacity" />
+                    
+                    <div className="flex justify-between items-start mb-8">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center font-display font-bold text-indigo-400 border border-white/10">
+                          {index + 1}
+                        </div>
+                        <input
+                          type="text"
+                          value={app.title}
+                          placeholder="App Title"
+                          onChange={(e) => updateAppField(app.id, 'title', e.target.value)}
+                          className="bg-transparent text-2xl font-display font-bold focus:outline-none border-b border-transparent focus:border-indigo-500/50"
                         />
                       </div>
+                      <button
+                        onClick={() => removeApp(app.id)}
+                        className="p-2 text-slate-600 hover:text-rose-500 transition-colors"
+                      >
+                        <Trash2 className="w-5 h-5" />
+                      </button>
                     </div>
 
-                    <div className="space-y-6">
-                      <ImageUploader 
-                        label="App Icon / Thumbnail"
-                        currentUrl={app.imageUrl}
-                        onUpload={(url) => updateAppField(app.id, 'imageUrl', url)}
-                        folder="apps"
-                      />
-                      
-                      <div className="space-y-4">
+                    <div className="grid md:grid-cols-2 gap-8">
+                      <div className="space-y-6">
                         <div className="space-y-2">
-                          <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
-                            <LinkIcon className="w-3 h-3" /> App Store URL
-                          </label>
-                          <input
-                            type="text"
-                            value={app.appleLink}
-                            onChange={(e) => updateAppField(app.id, 'appleLink', e.target.value)}
-                            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors text-xs"
+                          <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Functional Bio</label>
+                          <textarea
+                            rows={3}
+                            value={app.description}
+                            onChange={(e) => updateAppField(app.id, 'description', e.target.value)}
+                            className="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors text-sm"
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
-                            <LinkIcon className="w-3 h-3" /> Google Play URL
-                          </label>
-                          <input
-                            type="text"
-                            value={app.googleLink}
-                            onChange={(e) => updateAppField(app.id, 'googleLink', e.target.value)}
-                            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors text-xs"
+                          <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Key Pillars (One per line)</label>
+                          <textarea
+                            rows={4}
+                            value={app.features.join('\n')}
+                            onChange={(e) => updateAppField(app.id, 'features', e.target.value.split('\n'))}
+                            className="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors text-sm font-mono"
                           />
+                        </div>
+                      </div>
+
+                      <div className="space-y-6">
+                        <ImageUploader 
+                          label="Custom Icon Asset"
+                          currentUrl={app.imageUrl}
+                          onUpload={(url) => updateAppField(app.id, 'imageUrl', url)}
+                          folder="apps"
+                        />
+                        
+                        <div className="space-y-4">
+                          <div className="space-y-2">
+                            <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                              <LinkIcon className="w-3 h-3" /> App Store URL
+                            </label>
+                            <input
+                              type="text"
+                              value={app.appleLink}
+                              onChange={(e) => updateAppField(app.id, 'appleLink', e.target.value)}
+                              className="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors text-xs"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                              <LinkIcon className="w-3 h-3" /> Google Play URL
+                            </label>
+                            <input
+                              type="text"
+                              value={app.googleLink}
+                              onChange={(e) => updateAppField(app.id, 'googleLink', e.target.value)}
+                              className="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors text-xs"
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

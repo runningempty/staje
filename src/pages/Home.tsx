@@ -143,8 +143,14 @@ export default function Home() {
       <section id="about" className="py-40 px-6 md:px-12 relative overflow-hidden bg-black/20 backdrop-blur-3xl border-y border-white/5">
         <div className="max-w-4xl mx-auto relative z-10 text-center space-y-12">
           <h2 className="text-4xl md:text-7xl font-display font-bold leading-tight">
-            {config.aboutTitle?.split(' ').slice(0, -2).join(' ')} <br />
-            <span className="italic font-light text-slate-500">{config.aboutTitle?.split(' ').slice(-2).join(' ')}</span>
+            {config.aboutTitle?.includes(' ') ? (
+              <>
+                {config.aboutTitle.split(' ').slice(0, -2).join(' ')} <br />
+                <span className="italic font-light text-slate-500">{config.aboutTitle.split(' ').slice(-2).join(' ')}</span>
+              </>
+            ) : (
+              config.aboutTitle
+            )}
           </h2>
           <p className="text-xl md:text-2xl text-slate-400 leading-relaxed font-light">
             {config.aboutSubtitle}
