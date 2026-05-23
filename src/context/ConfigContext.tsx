@@ -27,8 +27,16 @@ export interface SiteConfig {
   heroTitle: string;
   heroAccent: string;
   heroSubtitle: string;
+  heroImageUrl: string;
   contactEmail: string;
   displayFont: string;
+  footerTwitter?: string;
+  footerLinkedin?: string;
+  footerGithub?: string;
+  footerCopyright?: string;
+  aboutTitle?: string;
+  aboutSubtitle?: string;
+  aboutItems?: { id: string; number: string; title: string; text: string }[];
 }
 
 interface ConfigContextType {
@@ -43,8 +51,20 @@ const DEFAULT_CONFIG: SiteConfig = {
   heroTitle: "Digital",
   heroAccent: "Ecosystems",
   heroSubtitle: "We design and develop purpose-built mobile applications that redefine how people interact with technology. Staje is not a service—it is a launchpad for modern utilities.",
+  heroImageUrl: "/src/assets/images/staje_hero_abstract_1779198920246.png",
   contactEmail: "zkhan@staje.com",
   displayFont: "Outfit",
+  footerTwitter: "#",
+  footerLinkedin: "#",
+  footerGithub: "#",
+  footerCopyright: "© 2026 STAJE PLATFORM • CONCEIVED IN REALITY",
+  aboutTitle: "Building the apps the future requires.",
+  aboutSubtitle: "Staje stands at the intersection of aesthetic design and functional engineering. Our platform conceives apps that solve specific problems without the noise of mass-market features.",
+  aboutItems: [
+    { id: '1', number: '01', title: 'Minimalist', text: 'We strip away the excess to focus on core value.' },
+    { id: '2', number: '02', title: 'Performant', text: 'Built with cutting-edge tech stacks for native speed.' },
+    { id: '3', number: '03', title: 'Exclusive', text: 'Conceived for specific user groups and landscapes.' },
+  ]
 };
 
 const ConfigContext = createContext<ConfigContextType | undefined>(undefined);
@@ -59,11 +79,16 @@ export function ConfigProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // 1. Auth State
     const unsubscribeAuth = onAuthStateChanged(auth, (u) => {
+      console.log("Auth State Changed:", u ? `User: ${u.email}` : "No User");
       setUser(u);
+      
       // Basic admin check based on email (matching rules)
-      const adminEmail = 'zkhan@staje.com'.toLowerCase();
-      const userEmail = u?.email?.toLowerCase();
-      setIsAdmin(!!u && userEmail === adminEmail);
+      const adminEmail = 'zkhan@staje.com'.toLowerCase().trim();
+      const userEmail = u?.email?.toLowerCase().trim();
+      
+      const adminStatus = !!u && userEmail === adminEmail;
+      console.log("Admin Check:", { userEmail, adminEmail, isAdmin: adminStatus });
+      setIsAdmin(adminStatus);
     });
 
     // 2. Fetch Config
