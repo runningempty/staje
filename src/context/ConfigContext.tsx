@@ -96,8 +96,10 @@ export function ConfigProvider({ children }: { children: React.ReactNode }) {
       (docSnap) => {
         if (docSnap.exists()) {
           const data = docSnap.data() as SiteConfig;
-          setConfig(data);
-          document.documentElement.style.setProperty('--font-display', `"${data.displayFont}", sans-serif`);
+          // Merge with defaults to ensure new fields are present
+          const mergedConfig = { ...DEFAULT_CONFIG, ...data };
+          setConfig(mergedConfig);
+          document.documentElement.style.setProperty('--font-display', `"${mergedConfig.displayFont}", sans-serif`);
         }
       },
       (error) => {
