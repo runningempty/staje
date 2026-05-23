@@ -159,9 +159,12 @@ export default function Admin() {
               Back to Site
             </Link>
             <div className="flex items-center justify-between gap-8">
-              <h1 className="text-4xl md:text-5xl font-display font-bold tracking-tighter">
-                Platform <span className="text-indigo-400">Control</span>
-              </h1>
+              <div className="flex items-center gap-4">
+                <h1 className="text-4xl md:text-5xl font-display font-bold tracking-tighter">
+                  Platform <span className="text-indigo-400">Control</span>
+                </h1>
+                <span className="hidden md:block px-2 py-1 rounded bg-white/10 text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-2 border border-white/5">v2.1 Build</span>
+              </div>
               <button 
                 onClick={handleLogout}
                 className="md:hidden p-2 rounded-xl bg-white/5 border border-white/10 text-rose-400"
@@ -206,18 +209,19 @@ export default function Admin() {
         )}
 
         {/* Tabs Navigation */}
-        <div className="flex flex-wrap gap-2 mb-8 bg-white/5 p-1.5 rounded-2xl border border-white/10 w-fit">
+        <div id="admin-tabs-nav" className="flex flex-wrap gap-2 mb-12 bg-white/5 p-2 rounded-2xl border border-white/10 w-fit backdrop-blur-md">
           {tabs.map(tab => (
             <button
               key={tab.id}
+              id={`tab-btn-${tab.id}`}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-all ${
+              className={`flex items-center gap-3 px-6 py-4 rounded-xl font-bold text-xs uppercase tracking-widest transition-all ${
                 activeTab === tab.id 
-                  ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20' 
-                  : 'text-slate-500 hover:text-slate-300 hover:bg-white/5'
+                  ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/30 ring-1 ring-white/20' 
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/10'
               }`}
             >
-              <tab.icon className="w-4 h-4" />
+              <tab.icon className={`w-4 h-4 ${activeTab === tab.id ? 'text-white' : 'text-slate-500'}`} />
               {tab.label}
             </button>
           ))}
