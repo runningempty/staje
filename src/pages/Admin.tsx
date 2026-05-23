@@ -139,10 +139,10 @@ export default function Admin() {
   }
 
   const tabs = [
-    { id: 'identity', label: 'Identity', icon: Type },
-    { id: 'about', label: 'Content', icon: Info },
-    { id: 'social', label: 'Social', icon: Globe },
-    { id: 'ecosystem', label: 'Ecosystem', icon: Plus },
+    { id: 'identity', label: 'Identity', icon: Type, color: 'text-indigo-400' },
+    { id: 'about', label: 'Vision Control', icon: Info, color: 'text-emerald-400' },
+    { id: 'social', label: 'Ecosystem Links', icon: Globe, color: 'text-cyan-400' },
+    { id: 'ecosystem', label: 'App Pipeline', icon: Plus, color: 'text-rose-400' },
   ] as const;
 
   return (
@@ -163,7 +163,9 @@ export default function Admin() {
                 <h1 className="text-4xl md:text-5xl font-display font-bold tracking-tighter">
                   Platform <span className="text-indigo-400">Control</span>
                 </h1>
-                <span className="hidden md:block px-2 py-1 rounded bg-white/10 text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-2 border border-white/5">v2.1 Build</span>
+                <div className="hidden md:flex flex-col mt-2">
+                   <span className="px-2 py-0.5 rounded bg-indigo-500/10 text-[9px] font-bold text-indigo-400 uppercase tracking-[0.2em] border border-indigo-500/10">v2.4 Production Build</span>
+                </div>
               </div>
               <button 
                 onClick={handleLogout}
@@ -185,16 +187,16 @@ export default function Admin() {
             <button
               onClick={handleSave}
               disabled={status === 'saving'}
-              className={`flex-1 md:flex-none flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-bold transition-all ${
+              className={`flex-1 md:flex-none flex items-center justify-center gap-3 px-10 py-4 rounded-2xl font-bold transition-all font-display text-xs uppercase tracking-widest ${
                 status === 'saved' ? 'bg-emerald-500 text-white' : 
                 status === 'error' ? 'bg-rose-600 text-white' :
-                'bg-indigo-600 hover:bg-indigo-500 text-white shadow-xl shadow-indigo-600/20'
+                'bg-indigo-600 hover:bg-indigo-500 text-white shadow-2xl shadow-indigo-600/40'
               }`}
             >
-              {status === 'saving' ? 'Saving...' : status === 'saved' ? 'Saved!' : status === 'error' ? 'Error!' : (
+              {status === 'saving' ? 'Committing...' : status === 'saved' ? 'Synced' : status === 'error' ? 'Sync Error' : (
                 <>
                   <Save className="w-5 h-5" />
-                  Save Changes
+                  Apply Changes
                 </>
               )}
             </button>
@@ -208,26 +210,31 @@ export default function Admin() {
           </div>
         )}
 
-        {/* Tabs Navigation */}
-        <div id="admin-tabs-nav" className="flex flex-wrap gap-2 mb-12 bg-white/5 p-2 rounded-2xl border border-white/10 w-fit backdrop-blur-md">
+        {/* System Tabs */}
+        <div id="admin-hub-tabs" className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-16 p-2 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-3xl">
           {tabs.map(tab => (
             <button
               key={tab.id}
-              id={`tab-btn-${tab.id}`}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-3 px-6 py-4 rounded-xl font-bold text-xs uppercase tracking-widest transition-all ${
+              className={`flex items-center gap-3 px-6 py-5 rounded-2xl font-bold text-[10px] uppercase tracking-[0.15em] transition-all duration-500 ${
                 activeTab === tab.id 
-                  ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/30 ring-1 ring-white/20' 
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/10'
+                  ? 'bg-white text-black shadow-2xl shadow-white/10 scale-[1.02]' 
+                  : 'text-slate-400 hover:text-white hover:bg-white/5'
               }`}
             >
-              <tab.icon className={`w-4 h-4 ${activeTab === tab.id ? 'text-white' : 'text-slate-500'}`} />
+              <tab.icon className={`w-4 h-4 ${activeTab === tab.id ? 'text-indigo-600' : tab.color}`} />
               {tab.label}
             </button>
           ))}
         </div>
 
-        <div className="space-y-12">
+        <motion.div 
+          key={activeTab}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="space-y-12 pb-20"
+        >
           {activeTab === 'identity' && (
             <div className="grid md:grid-cols-2 gap-8">
               <section className="p-8 rounded-[32px] bg-white/5 border border-white/10 backdrop-blur-xl space-y-6">
@@ -559,7 +566,7 @@ export default function Admin() {
               </div>
             </div>
           )}
-        </div>
+        </motion.div>
       </div>
     </div>
   );
