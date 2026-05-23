@@ -108,9 +108,9 @@ export default function Admin() {
     return (
       <div className="min-h-screen bg-staje-bg flex flex-col items-center justify-center p-6 text-center">
         <div className="mesh-gradient-1" />
-        <div className="fixed top-8 left-8 flex flex-col items-start">
-           <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-[9px] font-bold text-emerald-400 uppercase tracking-[0.2em] border border-emerald-500/10 mb-1">v3.1 Verified Build</span>
-           <span className="px-2 py-0.5 rounded bg-indigo-500/10 text-[9px] font-bold text-indigo-400 uppercase tracking-[0.2em] border border-indigo-500/10 italic opacity-50">STABLE_DEPLOYMENT_ACTIVE</span>
+        <div className="fixed top-8 left-8 flex flex-col items-start z-50">
+           <span className="px-3 py-1 rounded bg-rose-500 text-[10px] font-black text-white uppercase tracking-[0.3em] shadow-2xl mb-1">v4.0 OVERRIDE BUILD</span>
+           <span className="px-2 py-0.5 rounded bg-indigo-500/20 text-[9px] font-bold text-indigo-400 uppercase tracking-[0.2em] border border-indigo-500/20 italic">FORCED_DEPLOYMENT_ACTIVE</span>
         </div>
         <motion.div 
           initial={{ opacity: 0, scale: 0.9 }}
@@ -138,9 +138,9 @@ export default function Admin() {
   if (!isAdmin) {
     return (
       <div className="min-h-screen bg-staje-bg flex flex-col items-center justify-center p-6 text-center">
-         <div className="fixed top-8 left-8 flex flex-col items-start">
-           <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-[9px] font-bold text-emerald-400 uppercase tracking-[0.2em] border border-emerald-500/10 mb-1">v3.1 Verified Build</span>
-           <span className="px-2 py-0.5 rounded bg-indigo-500/10 text-[9px] font-bold text-indigo-400 uppercase tracking-[0.2em] border border-indigo-500/10 italic opacity-50">STABLE_DEPLOYMENT_ACTIVE</span>
+         <div className="fixed top-8 left-8 flex flex-col items-start z-50">
+           <span className="px-3 py-1 rounded bg-rose-500 text-[10px] font-black text-white uppercase tracking-[0.3em] shadow-2xl mb-1">v4.0 OVERRIDE BUILD</span>
+           <span className="px-2 py-0.5 rounded bg-indigo-500/20 text-[9px] font-bold text-indigo-400 uppercase tracking-[0.2em] border border-indigo-500/20 italic">FORCED_DEPLOYMENT_ACTIVE</span>
          </div>
          <ShieldAlert className="w-16 h-16 text-rose-500 mb-6 animate-pulse" />
          <h1 className="text-2xl font-bold mb-4">Access Denied</h1>
@@ -177,8 +177,8 @@ export default function Admin() {
                   Platform <span className="text-indigo-400">Control</span>
                 </h1>
                 <div className="hidden md:flex flex-col mt-2">
-                   <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-[9px] font-bold text-emerald-400 uppercase tracking-[0.2em] border border-emerald-500/10 mb-1">v3.1 Verified Build</span>
-                   <span className="px-2 py-0.5 rounded bg-indigo-500/10 text-[9px] font-bold text-indigo-400 uppercase tracking-[0.2em] border border-indigo-500/10 italic opacity-50">STABLE_DEPLOYMENT_ACTIVE</span>
+                   <span className="px-3 py-1 rounded bg-rose-500 text-[10px] font-black text-white uppercase tracking-[0.3em] mb-1">v4.0 OVERRIDE BUILD</span>
+                   <span className="px-2 py-0.5 rounded bg-indigo-500/20 text-[9px] font-bold text-indigo-400 uppercase tracking-[0.2em] border border-indigo-500/20 italic">FORCED_DEPLOYMENT_ACTIVE</span>
                 </div>
               </div>
               <button 
