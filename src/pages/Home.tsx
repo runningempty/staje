@@ -44,7 +44,7 @@ export default function Home() {
       <section className="relative h-screen flex items-center px-6 md:px-12 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img 
-            src="/src/assets/images/staje_hero_abstract_1779198920246.png" 
+            src={config.heroImageUrl} 
             alt="Hero Background" 
             className="w-full h-full object-cover opacity-40 scale-105"
             referrerPolicy="no-referrer"
@@ -143,29 +143,21 @@ export default function Home() {
       <section id="about" className="py-40 px-6 md:px-12 relative overflow-hidden bg-black/20 backdrop-blur-3xl border-y border-white/5">
         <div className="max-w-4xl mx-auto relative z-10 text-center space-y-12">
           <h2 className="text-4xl md:text-7xl font-display font-bold leading-tight">
-            Building the apps <br />
-            <span className="italic font-light text-slate-500">the future requires.</span>
+            {config.aboutTitle?.split(' ').slice(0, -2).join(' ')} <br />
+            <span className="italic font-light text-slate-500">{config.aboutTitle?.split(' ').slice(-2).join(' ')}</span>
           </h2>
           <p className="text-xl md:text-2xl text-slate-400 leading-relaxed font-light">
-            Staje stands at the intersection of aesthetic design and functional engineering. Our platform conceives apps that solve specific problems without the noise of mass-market features.
+            {config.aboutSubtitle}
           </p>
           <div className="pt-8">
              <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-12 text-left">
-                <div className="space-y-4 p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl">
-                  <div className="text-indigo-400 font-display text-4xl font-bold">01</div>
-                  <h4 className="font-bold text-xl uppercase tracking-tighter">Minimalist</h4>
-                  <p className="text-slate-500 text-sm leading-relaxed">We strip away the excess to focus on core value.</p>
-                </div>
-                <div className="space-y-4 p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl">
-                  <div className="text-cyan-400 font-display text-4xl font-bold">02</div>
-                  <h4 className="font-bold text-xl uppercase tracking-tighter">Performant</h4>
-                  <p className="text-slate-500 text-sm leading-relaxed">Built with cutting-edge tech stacks for native speed.</p>
-                </div>
-                <div className="space-y-4 p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl">
-                  <div className="text-rose-400 font-display text-4xl font-bold">03</div>
-                  <h4 className="font-bold text-xl uppercase tracking-tighter">Exclusive</h4>
-                  <p className="text-slate-500 text-sm leading-relaxed">Conceived for specific user groups and landscapes.</p>
-                </div>
+                {config.aboutItems?.map((item, idx) => (
+                  <div key={item.id} className="space-y-4 p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl">
+                    <div className={`${idx === 0 ? 'text-indigo-400' : idx === 1 ? 'text-cyan-400' : 'text-rose-400'} font-display text-4xl font-bold`}>{item.number}</div>
+                    <h4 className="font-bold text-xl uppercase tracking-tighter">{item.title}</h4>
+                    <p className="text-slate-500 text-sm leading-relaxed">{item.text}</p>
+                  </div>
+                ))}
              </div>
           </div>
         </div>
@@ -183,15 +175,21 @@ export default function Home() {
               Conceived by Staje Platform • Internal Utility Network
             </p>
             <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 rounded-full glass-panel flex items-center justify-center hover:bg-indigo-600 transition-colors">
-                <Twitter className="w-4 h-4" />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full glass-panel flex items-center justify-center hover:bg-indigo-600 transition-colors">
-                <Linkedin className="w-4 h-4" />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full glass-panel flex items-center justify-center hover:bg-indigo-600 transition-colors">
-                <Github className="w-4 h-4" />
-              </a>
+              {config.footerTwitter && (
+                <a href={config.footerTwitter} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full glass-panel flex items-center justify-center hover:bg-indigo-600 transition-colors">
+                  <Twitter className="w-4 h-4" />
+                </a>
+              )}
+              {config.footerLinkedin && (
+                <a href={config.footerLinkedin} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full glass-panel flex items-center justify-center hover:bg-indigo-600 transition-colors">
+                  <Linkedin className="w-4 h-4" />
+                </a>
+              )}
+              {config.footerGithub && (
+                <a href={config.footerGithub} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full glass-panel flex items-center justify-center hover:bg-indigo-600 transition-colors">
+                  <Github className="w-4 h-4" />
+                </a>
+              )}
             </div>
           </div>
 
@@ -213,7 +211,7 @@ export default function Home() {
           </div>
         </div>
         <div className="max-w-7xl mx-auto pt-20 mt-20 border-t border-white/5 text-[10px] tracking-[0.2em] font-bold text-slate-600 uppercase flex flex-col md:flex-row justify-between gap-4">
-          <span>&copy; 2026 STAJE PLATFORM • CONCEIVED IN REALITY</span>
+          <span>{config.footerCopyright}</span>
           <span className="flex items-center gap-2">
             STAY FOCUSED <div className="w-1 h-1 rounded-full bg-indigo-500" /> STAY RELEVANT
           </span>

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "motion/react";
-import { Save, Plus, Trash2, ArrowLeft, Image as ImageIcon, Link as LinkIcon, Type, Mail, LogIn, LogOut, ShieldAlert } from "lucide-react";
+import { Save, Plus, Trash2, ArrowLeft, Image as ImageIcon, Link as LinkIcon, Type, Mail, LogIn, LogOut, ShieldAlert, Globe, Info, Facebook, Twitter, Linkedin, Github, Copyright } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useConfig, AppData, SiteConfig } from "../context/ConfigContext";
+import { ImageUploader } from "../components/ImageUploader";
 import { 
   db, 
   auth, 
@@ -266,6 +267,142 @@ export default function Admin() {
                     <option value="Playfair Display">Playfair (Elegant)</option>
                   </select>
                 </div>
+
+                <div className="space-y-4 pt-4 border-t border-white/5">
+                  <div className="flex items-center gap-3 mb-2">
+                    <ImageIcon className="w-5 h-5 text-indigo-400" />
+                    <h2 className="font-bold uppercase tracking-widest text-[10px] text-slate-500">Global Imagery</h2>
+                  </div>
+                  <ImageUploader 
+                    label="Hero Background" 
+                    currentUrl={localConfig.heroImageUrl} 
+                    onUpload={(url) => setLocalConfig({...localConfig, heroImageUrl: url})} 
+                    folder="hero"
+                  />
+                </div>
+              </div>
+            </section>
+
+            <section className="p-8 rounded-[32px] bg-white/5 border border-white/10 backdrop-blur-xl space-y-6">
+              <div className="flex items-center gap-3 mb-2">
+                <Info className="w-5 h-5 text-emerald-400" />
+                <h2 className="font-bold uppercase tracking-widest text-[10px] text-slate-500">About Section</h2>
+              </div>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Title</label>
+                  <input
+                    type="text"
+                    value={localConfig.aboutTitle || ''}
+                    onChange={(e) => setLocalConfig({...localConfig, aboutTitle: e.target.value})}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Subtitle</label>
+                  <textarea
+                    rows={3}
+                    value={localConfig.aboutSubtitle || ''}
+                    onChange={(e) => setLocalConfig({...localConfig, aboutSubtitle: e.target.value})}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors text-sm"
+                  />
+                </div>
+                
+                <div className="space-y-4 pt-4 border-t border-white/5">
+                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Vision Points</label>
+                  {localConfig.aboutItems?.map((item, idx) => (
+                    <div key={item.id} className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-3">
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          value={item.number}
+                          placeholder="01"
+                          onChange={(e) => {
+                            const newItems = [...(localConfig.aboutItems || [])];
+                            newItems[idx] = { ...item, number: e.target.value };
+                            setLocalConfig({ ...localConfig, aboutItems: newItems });
+                          }}
+                          className="w-12 bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-xs text-indigo-400 font-bold"
+                        />
+                        <input
+                          type="text"
+                          value={item.title}
+                          placeholder="Point Title"
+                          onChange={(e) => {
+                            const newItems = [...(localConfig.aboutItems || [])];
+                            newItems[idx] = { ...item, title: e.target.value };
+                            setLocalConfig({ ...localConfig, aboutItems: newItems });
+                          }}
+                          className="flex-1 bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-xs font-bold"
+                        />
+                      </div>
+                      <textarea
+                        rows={2}
+                        value={item.text}
+                        placeholder="Description..."
+                        onChange={(e) => {
+                          const newItems = [...(localConfig.aboutItems || [])];
+                          newItems[idx] = { ...item, text: e.target.value };
+                          setLocalConfig({ ...localConfig, aboutItems: newItems });
+                        }}
+                        className="w-full bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-xs text-slate-400"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            <section className="p-8 rounded-[32px] bg-white/5 border border-white/10 backdrop-blur-xl space-y-6">
+              <div className="flex items-center gap-3 mb-2">
+                <Globe className="w-5 h-5 text-cyan-400" />
+                <h2 className="font-bold uppercase tracking-widest text-[10px] text-slate-500">Footer & Social</h2>
+              </div>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                    <Twitter className="w-3 h-3" /> Twitter URL
+                  </label>
+                  <input
+                    type="text"
+                    value={localConfig.footerTwitter || ''}
+                    onChange={(e) => setLocalConfig({...localConfig, footerTwitter: e.target.value})}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                    <Linkedin className="w-3 h-3" /> LinkedIn URL
+                  </label>
+                  <input
+                    type="text"
+                    value={localConfig.footerLinkedin || ''}
+                    onChange={(e) => setLocalConfig({...localConfig, footerLinkedin: e.target.value})}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                    <Github className="w-3 h-3" /> GitHub URL
+                  </label>
+                  <input
+                    type="text"
+                    value={localConfig.footerGithub || ''}
+                    onChange={(e) => setLocalConfig({...localConfig, footerGithub: e.target.value})}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                    <Copyright className="w-3 h-3" /> Copyright Text
+                  </label>
+                  <input
+                    type="text"
+                    value={localConfig.footerCopyright || ''}
+                    onChange={(e) => setLocalConfig({...localConfig, footerCopyright: e.target.value})}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors"
+                  />
+                </div>
               </div>
             </section>
           </div>
@@ -332,17 +469,13 @@ export default function Admin() {
                     </div>
 
                     <div className="space-y-6">
-                      <div className="space-y-2">
-                        <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
-                          <ImageIcon className="w-3 h-3" /> Image URL
-                        </label>
-                        <input
-                          type="text"
-                          value={app.imageUrl}
-                          onChange={(e) => updateAppField(app.id, 'imageUrl', e.target.value)}
-                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors text-xs"
-                        />
-                      </div>
+                      <ImageUploader 
+                        label="App Icon / Thumbnail"
+                        currentUrl={app.imageUrl}
+                        onUpload={(url) => updateAppField(app.id, 'imageUrl', url)}
+                        folder="apps"
+                      />
+                      
                       <div className="space-y-4">
                         <div className="space-y-2">
                           <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
