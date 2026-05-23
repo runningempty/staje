@@ -19,6 +19,11 @@ import {
 
 export default function Admin() {
   const { apps, config, user, isAdmin, loading } = useConfig();
+  
+  useEffect(() => {
+    console.log("--- PLATFORM CONTROL V3.1 INITIALIZED ---");
+  }, []);
+
   const [localConfig, setLocalConfig] = useState<SiteConfig>(config);
   const [localApps, setLocalApps] = useState<AppData[]>(apps);
   const [status, setStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
@@ -103,6 +108,10 @@ export default function Admin() {
     return (
       <div className="min-h-screen bg-staje-bg flex flex-col items-center justify-center p-6 text-center">
         <div className="mesh-gradient-1" />
+        <div className="fixed top-8 left-8 flex flex-col items-start">
+           <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-[9px] font-bold text-emerald-400 uppercase tracking-[0.2em] border border-emerald-500/10 mb-1">v3.1 Verified Build</span>
+           <span className="px-2 py-0.5 rounded bg-indigo-500/10 text-[9px] font-bold text-indigo-400 uppercase tracking-[0.2em] border border-indigo-500/10 italic opacity-50">STABLE_DEPLOYMENT_ACTIVE</span>
+        </div>
         <motion.div 
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -129,6 +138,10 @@ export default function Admin() {
   if (!isAdmin) {
     return (
       <div className="min-h-screen bg-staje-bg flex flex-col items-center justify-center p-6 text-center">
+         <div className="fixed top-8 left-8 flex flex-col items-start">
+           <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-[9px] font-bold text-emerald-400 uppercase tracking-[0.2em] border border-emerald-500/10 mb-1">v3.1 Verified Build</span>
+           <span className="px-2 py-0.5 rounded bg-indigo-500/10 text-[9px] font-bold text-indigo-400 uppercase tracking-[0.2em] border border-indigo-500/10 italic opacity-50">STABLE_DEPLOYMENT_ACTIVE</span>
+         </div>
          <ShieldAlert className="w-16 h-16 text-rose-500 mb-6 animate-pulse" />
          <h1 className="text-2xl font-bold mb-4">Access Denied</h1>
          <p className="text-slate-400 mb-8 max-w-sm">Authorized personnel only. Your account ({user.email}) does not have administrative privileges.</p>
@@ -164,14 +177,15 @@ export default function Admin() {
                   Platform <span className="text-indigo-400">Control</span>
                 </h1>
                 <div className="hidden md:flex flex-col mt-2">
-                   <span className="px-2 py-0.5 rounded bg-indigo-500/10 text-[9px] font-bold text-indigo-400 uppercase tracking-[0.2em] border border-indigo-500/10">v2.4 Production Build</span>
+                   <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-[9px] font-bold text-emerald-400 uppercase tracking-[0.2em] border border-emerald-500/10 mb-1">v3.1 Verified Build</span>
+                   <span className="px-2 py-0.5 rounded bg-indigo-500/10 text-[9px] font-bold text-indigo-400 uppercase tracking-[0.2em] border border-indigo-500/10 italic opacity-50">STABLE_DEPLOYMENT_ACTIVE</span>
                 </div>
               </div>
               <button 
                 onClick={handleLogout}
-                className="md:hidden p-2 rounded-xl bg-white/5 border border-white/10 text-rose-400"
+                className="md:hidden p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400"
               >
-                <LogOut className="w-5 h-5" />
+                <ShieldAlert className="w-5 h-5" />
               </button>
             </div>
           </div>
