@@ -98,8 +98,17 @@ export default function Admin() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-staje-bg">
-        <div className="animate-spin w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full" />
+      <div className="min-h-screen bg-staje-bg flex flex-col items-center justify-center p-6 text-center">
+        <div className="mesh-gradient-1" />
+        <div className="fixed top-8 left-8 flex flex-col items-start z-50">
+           <span className="px-3 py-1 rounded bg-rose-500 text-[10px] font-black text-white uppercase tracking-[0.3em] shadow-2xl mb-1">v4.0 OVERRIDE BUILD</span>
+           <span className="px-2 py-0.5 rounded bg-indigo-500/20 text-[9px] font-bold text-indigo-400 uppercase tracking-[0.2em] border border-indigo-500/20 italic">FORCED_DEPLOYMENT_ACTIVE</span>
+        </div>
+        <div className="relative">
+          <div className="animate-spin w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full shadow-2xl shadow-indigo-500/20" />
+          <div className="absolute inset-0 flex items-center justify-center font-display font-bold text-xs text-indigo-400">S</div>
+        </div>
+        <p className="mt-8 text-slate-500 font-display font-medium tracking-widest animate-pulse">SYNCHRONIZING PLATFORM CONTROL...</p>
       </div>
     );
   }
