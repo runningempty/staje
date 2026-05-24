@@ -34,6 +34,7 @@ export default function Home() {
           <a href="#apps" className="hover:text-white transition-colors">APPS</a>
           <a href="#about" className="hover:text-white transition-colors">ABOUT</a>
           <Link to="/admin" className="hover:text-white transition-colors">ADMIN</Link>
+          <Link to="/privacy" className="hover:text-white transition-colors">PRIVACY</Link>
           <Link to="/contact" className="px-5 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all border border-white/10 backdrop-blur-md">
             CONTACT
           </Link>
