@@ -27,6 +27,7 @@
     "node-domexception": "file:./shims/node-domexception"
   },
   "devDependencies": {
+    "node-domexception": "file:./shims/node-domexception",
     "@types/node": "^22.14.0",
     "autoprefixer": "^10.4.21",
     "tailwindcss": "^4.1.14",
