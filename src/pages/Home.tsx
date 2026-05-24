@@ -34,9 +34,9 @@ export default function Home() {
           <a href="#apps" className="hover:text-white transition-colors">APPS</a>
           <a href="#about" className="hover:text-white transition-colors">ABOUT</a>
           <Link to="/admin" className="hover:text-white transition-colors">ADMIN</Link>
-          <a href={`mailto:${config.contactEmail}`} className="px-5 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all border border-white/10 backdrop-blur-md">
+          <Link to="/contact" className="px-5 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all border border-white/10 backdrop-blur-md">
             CONTACT
-          </a>
+          </Link>
         </div>
       </nav>
 
@@ -203,15 +203,15 @@ export default function Home() {
             <div className="space-y-4">
               <h5 className="font-bold text-[10px] tracking-widest uppercase text-slate-600">Legal</h5>
               <ul className="space-y-2 text-sm text-slate-500">
-                <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
+                <li><Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
+                <li><Link to="/privacy" className="hover:text-white transition-colors">Terms of Service</Link></li>
               </ul>
             </div>
             <div className="space-y-4">
               <h5 className="font-bold text-[10px] tracking-widest uppercase text-slate-600">Contact</h5>
               <ul className="space-y-2 text-sm text-slate-500">
-                <li><a href={`mailto:${config.contactEmail}`} className="hover:text-white transition-colors">Inquiries</a></li>
-                <li><a href={`mailto:${config.contactEmail}`} className="hover:text-white transition-colors">Support</a></li>
+                <li><Link to="/contact" className="hover:text-white transition-colors">Inquiries</Link></li>
+                <li><Link to="/contact" className="hover:text-white transition-colors">Support Helpline</Link></li>
               </ul>
             </div>
           </div>
