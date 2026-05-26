@@ -68,12 +68,18 @@ export default function Home() {
               Internal Ecosystem Showcase
             </div>
             
-            <h1 className="text-6xl md:text-8xl lg:text-9xl font-display font-bold tracking-tighter leading-[0.9]">
+            <h1 
+              style={{ fontSize: 'var(--hero-title-size)' }}
+              className="font-display font-bold tracking-tighter leading-[0.9]"
+            >
               {config.heroTitle} <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-500">{config.heroAccent}</span>
             </h1>
             
-            <p className="text-xl md:text-2xl text-slate-400 max-w-2xl font-light leading-relaxed">
+            <p 
+              style={{ fontSize: 'var(--hero-subtitle-size)' }}
+              className="text-slate-400 max-w-2xl font-light leading-relaxed"
+            >
               {config.heroSubtitle}
             </p>
 

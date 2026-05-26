@@ -310,24 +310,108 @@ export default function Admin() {
                     folder="hero"
                   />
                   
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Display Typeface</label>
-                    <div className="relative">
-                      <select
-                        value={localConfig.displayFont}
-                        onChange={(e) => setLocalConfig({...localConfig, displayFont: e.target.value})}
-                        className="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors appearance-none"
+                  {/* Typefaces */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Display Typeface</label>
+                      <div className="relative">
+                        <select
+                          value={localConfig.displayFont}
+                          onChange={(e) => setLocalConfig({...localConfig, displayFont: e.target.value})}
+                          className="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors appearance-none text-sm font-semibold"
+                        >
+                          <option value="Outfit" style={{ fontFamily: '"Outfit", sans-serif' }}>Outfit (Staje Default)</option>
+                          <option value="Inter" style={{ fontFamily: '"Inter", sans-serif' }}>Inter (Swiss Minimal)</option>
+                          <option value="Plus Jakarta Sans" style={{ fontFamily: '"Plus Jakarta Sans", sans-serif' }}>Plus Jakarta (Premium Geometry)</option>
+                          <option value="Space Grotesk" style={{ fontFamily: '"Space Grotesk", sans-serif' }}>Space Grotesk (Neo-Future)</option>
+                          <option value="Playfair Display" style={{ fontFamily: '"Playfair Display", serif' }}>Playfair (Editorial Serif)</option>
+                          <option value="Syne" style={{ fontFamily: '"Syne", sans-serif' }}>Syne (Artistic Display)</option>
+                          <option value="Space Mono" style={{ fontFamily: '"Space Mono", monospace' }}>Space Mono (Utility Code)</option>
+                        </select>
+                        <Type className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
+                      </div>
+                      <p 
+                        style={{ fontFamily: `"${localConfig.displayFont || 'Outfit'}", sans-serif` }}
+                        className="text-[10px] text-indigo-400 font-bold tracking-wide leading-none mt-2 truncate transition-all duration-300"
                       >
-                        <option value="Outfit">Outfit (Staje Default)</option>
-                        <option value="Inter">Inter (Swiss Minimal)</option>
-                        <option value="Space Grotesk">Space Grotesk (Neo-Future)</option>
-                        <option value="Playfair Display">Playfair (Editorial Serif)</option>
-                      </select>
-                      <Type className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
+                        ABC•123•Staje Platform
+                      </p>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Body/Content Typeface</label>
+                      <div className="relative">
+                        <select
+                          value={localConfig.bodyFont || "Inter"}
+                          onChange={(e) => setLocalConfig({...localConfig, bodyFont: e.target.value})}
+                          className="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors appearance-none text-sm font-semibold"
+                        >
+                          <option value="Inter" style={{ fontFamily: '"Inter", sans-serif' }}>Inter (Swiss Minimal)</option>
+                          <option value="Outfit" style={{ fontFamily: '"Outfit", sans-serif' }}>Outfit (Modern Sans)</option>
+                          <option value="Plus Jakarta Sans" style={{ fontFamily: '"Plus Jakarta Sans", sans-serif' }}>Plus Jakarta (Premium Geometry)</option>
+                          <option value="Space Grotesk" style={{ fontFamily: '"Space Grotesk", sans-serif' }}>Space Grotesk (Neo-Future)</option>
+                          <option value="Space Mono" style={{ fontFamily: '"Space Mono", monospace' }}>Space Mono (Utility Code)</option>
+                        </select>
+                        <Type className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
+                      </div>
+                      <p 
+                        style={{ fontFamily: `"${localConfig.bodyFont || 'Inter'}", sans-serif` }}
+                        className="text-[10px] text-emerald-400/90 font-medium leading-none mt-2 truncate transition-all duration-300"
+                      >
+                        Purpose-built digital experiences.
+                      </p>
                     </div>
                   </div>
 
-                  <div className="space-y-2">
+                  {/* Sizing Controls */}
+                  <div className="space-y-4 pt-2 border-t border-white/5">
+                    <h3 className="font-bold uppercase tracking-widest text-[9px] text-slate-500">Font Sizing Architecture</h3>
+                    
+                    <div className="grid grid-cols-3 gap-3">
+                      <div className="space-y-1">
+                        <label className="text-[9px] font-bold text-slate-500 uppercase tracking-widest block">Hero Title</label>
+                        <select
+                          value={localConfig.heroTitleSize || "large"}
+                          onChange={(e) => setLocalConfig({...localConfig, heroTitleSize: e.target.value})}
+                          className="w-full bg-white/5 border border-white/10 rounded-lg px-2 py-2 focus:outline-none focus:border-indigo-500/50 text-[11px] font-bold tracking-wider uppercase text-slate-300"
+                        >
+                          <option value="small">Compact</option>
+                          <option value="normal">Standard</option>
+                          <option value="large">Large</option>
+                          <option value="epic">Epic Scale</option>
+                        </select>
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[9px] font-bold text-slate-500 uppercase tracking-widest block">Hero Subtitle</label>
+                        <select
+                          value={localConfig.heroSubtitleSize || "normal"}
+                          onChange={(e) => setLocalConfig({...localConfig, heroSubtitleSize: e.target.value})}
+                          className="w-full bg-white/5 border border-white/10 rounded-lg px-2 py-2 focus:outline-none focus:border-indigo-500/50 text-[11px] font-bold tracking-wider uppercase text-slate-300"
+                        >
+                          <option value="small">Small (16px)</option>
+                          <option value="normal">Normal (20px)</option>
+                          <option value="large">Large (24px)</option>
+                          <option value="xlarge">Extra (30px)</option>
+                        </select>
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[9px] font-bold text-slate-500 uppercase tracking-widest block">Overall Scale</label>
+                        <select
+                          value={localConfig.bodyFontSize || "normal"}
+                          onChange={(e) => setLocalConfig({...localConfig, bodyFontSize: e.target.value})}
+                          className="w-full bg-white/5 border border-white/10 rounded-lg px-2 py-2 focus:outline-none focus:border-indigo-500/50 text-[11px] font-bold tracking-wider uppercase text-slate-300"
+                        >
+                          <option value="small">Compact (15px)</option>
+                          <option value="normal">Balanced (16px)</option>
+                          <option value="large">Spacious (18px)</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2 pt-2 border-t border-white/5">
                     <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Contact Gateway</label>
                     <div className="relative">
                       <input

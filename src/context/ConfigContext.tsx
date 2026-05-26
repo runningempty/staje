@@ -30,6 +30,10 @@ export interface SiteConfig {
   heroImageUrl: string;
   contactEmail: string;
   displayFont: string;
+  bodyFont?: string;
+  heroTitleSize?: string;
+  heroSubtitleSize?: string;
+  bodyFontSize?: string;
   footerTwitter?: string;
   footerLinkedin?: string;
   footerGithub?: string;
@@ -54,6 +58,10 @@ const DEFAULT_CONFIG: SiteConfig = {
   heroImageUrl: "/src/assets/images/staje_hero_abstract_1779198920246.png",
   contactEmail: "zkhan@staje.com",
   displayFont: "Outfit",
+  bodyFont: "Inter",
+  heroTitleSize: "large",
+  heroSubtitleSize: "normal",
+  bodyFontSize: "normal",
   footerTwitter: "#",
   footerLinkedin: "#",
   footerGithub: "#",
@@ -76,7 +84,42 @@ export function ConfigProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
 
+  // Helper to apply design attributes to the HTML document
+  const applySiteDesign = (cfg: SiteConfig) => {
+    document.documentElement.style.setProperty('--font-display', `"${cfg.displayFont || 'Outfit'}", sans-serif`);
+    document.documentElement.style.setProperty('--font-sans', `"${cfg.bodyFont || 'Inter'}", sans-serif`);
+    
+    const titleSizes: Record<string, string> = {
+      'small': 'clamp(2.5rem, 5vw, 4rem)',
+      'normal': 'clamp(3.5rem, 8vw, 6rem)',
+      'large': 'clamp(4.5rem, 12vw, 8rem)',
+      'epic': 'clamp(5rem, 14vw, 10rem)',
+    };
+    const activeTitleSize = titleSizes[cfg.heroTitleSize || 'large'] || titleSizes['large'];
+    document.documentElement.style.setProperty('--hero-title-size', activeTitleSize);
+
+    const subtitleSizes: Record<string, string> = {
+      'small': '1rem',
+      'normal': '1.25rem',
+      'large': '1.5rem',
+      'xlarge': '1.875rem',
+    };
+    const activeSubtitleSize = subtitleSizes[cfg.heroSubtitleSize || 'normal'] || subtitleSizes['normal'];
+    document.documentElement.style.setProperty('--hero-subtitle-size', activeSubtitleSize);
+
+    const bodySizes: Record<string, string> = {
+      'small': '15px',
+      'normal': '16px',
+      'large': '18px',
+    };
+    const activeBodySize = bodySizes[cfg.bodyFontSize || 'normal'] || bodySizes['normal'];
+    document.documentElement.style.setProperty('--body-font-size', activeBodySize);
+  };
+
   useEffect(() => {
+    // Apply initial default style overrides immediately
+    applySiteDesign(DEFAULT_CONFIG);
+
     // 1. Auth State
     const unsubscribeAuth = onAuthStateChanged(auth, (u) => {
       console.log("Auth State Changed:", u ? `User: ${u.email}` : "No User");
@@ -99,7 +142,7 @@ export function ConfigProvider({ children }: { children: React.ReactNode }) {
           // Merge with defaults to ensure new fields are present
           const mergedConfig = { ...DEFAULT_CONFIG, ...data };
           setConfig(mergedConfig);
-          document.documentElement.style.setProperty('--font-display', `"${mergedConfig.displayFont}", sans-serif`);
+          applySiteDesign(mergedConfig);
         }
       },
       (error) => {
