@@ -41,6 +41,8 @@ export interface SiteConfig {
   aboutTitle?: string;
   aboutSubtitle?: string;
   aboutItems?: { id: string; number: string; title: string; text: string }[];
+  siteName?: string;
+  logoLetter?: string;
 }
 
 interface ConfigContextType {
@@ -72,7 +74,9 @@ const DEFAULT_CONFIG: SiteConfig = {
     { id: '1', number: '01', title: 'Minimalist', text: 'We strip away the excess to focus on core value.' },
     { id: '2', number: '02', title: 'Performant', text: 'Built with cutting-edge tech stacks for native speed.' },
     { id: '3', number: '03', title: 'Exclusive', text: 'Conceived for specific user groups and landscapes.' },
-  ]
+  ],
+  siteName: "STAJE",
+  logoLetter: "S"
 };
 
 const ConfigContext = createContext<ConfigContextType | undefined>(undefined);
@@ -88,6 +92,7 @@ export function ConfigProvider({ children }: { children: React.ReactNode }) {
   const applySiteDesign = (cfg: SiteConfig) => {
     document.documentElement.style.setProperty('--font-display', `"${cfg.displayFont || 'Outfit'}", sans-serif`);
     document.documentElement.style.setProperty('--font-sans', `"${cfg.bodyFont || 'Inter'}", sans-serif`);
+    document.title = `${cfg.siteName || 'STAJE'} Platform`;
     
     const titleSizes: Record<string, string> = {
       'small': 'clamp(2.5rem, 5vw, 4rem)',
@@ -143,6 +148,10 @@ export function ConfigProvider({ children }: { children: React.ReactNode }) {
           const mergedConfig = { ...DEFAULT_CONFIG, ...data };
           setConfig(mergedConfig);
           applySiteDesign(mergedConfig);
+        } else {
+          // If Firestore config doc doesn't exists yet, use site default cfg
+          setConfig(DEFAULT_CONFIG);
+          applySiteDesign(DEFAULT_CONFIG);
         }
       },
       (error) => {
@@ -161,6 +170,7 @@ export function ConfigProvider({ children }: { children: React.ReactNode }) {
           id: doc.id,
           ...doc.data()
         })) as AppData[];
+
         setApps(appsData);
         setLoading(false);
       },

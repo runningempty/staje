@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "motion/react";
-import { Save, Plus, Trash2, ArrowLeft, Image as ImageIcon, Link as LinkIcon, Type, Mail, LogIn, LogOut, ShieldAlert, Globe, Info, Facebook, Twitter, Linkedin, Github, Copyright } from "lucide-react";
+import { Save, Plus, Trash2, ArrowLeft, Image as ImageIcon, Link as LinkIcon, Type, Mail, LogIn, LogOut, ShieldAlert, Globe, Info, Facebook, Twitter, Linkedin, Github, Copyright, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useConfig, AppData, SiteConfig } from "../context/ConfigContext";
 import { ImageUploader } from "../components/ImageUploader";
@@ -54,7 +54,7 @@ export default function Admin() {
       // 1. Save Config
       await setDoc(doc(db, 'config', 'site'), localConfig);
       
-      // 2. Save Apps (Sync based on current state)
+      // 2. Save Apps
       for (const app of localApps) {
         await setDoc(doc(db, 'apps', app.id), app);
       }
@@ -106,7 +106,7 @@ export default function Admin() {
         </div>
         <div className="relative">
           <div className="animate-spin w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full shadow-2xl shadow-indigo-500/20" />
-          <div className="absolute inset-0 flex items-center justify-center font-display font-bold text-xs text-indigo-400">S</div>
+          <div className="absolute inset-0 flex items-center justify-center font-display font-bold text-xs text-indigo-400">{config.logoLetter || "S"}</div>
         </div>
         <p className="mt-8 text-slate-500 font-display font-medium tracking-widest animate-pulse">SYNCHRONIZING PLATFORM CONTROL...</p>
       </div>
@@ -126,9 +126,9 @@ export default function Admin() {
           animate={{ opacity: 1, scale: 1 }}
           className="max-w-md w-full glass-panel p-12 space-y-8 relative z-10"
         >
-          <div className="w-20 h-20 rounded-3xl bg-indigo-600 mx-auto flex items-center justify-center font-display font-bold text-4xl shadow-2xl shadow-indigo-600/40">S</div>
+          <div className="w-20 h-20 rounded-3xl bg-indigo-600 mx-auto flex items-center justify-center font-display font-bold text-4xl shadow-2xl shadow-indigo-600/40">{config.logoLetter || "S"}</div>
           <div className="space-y-4">
-            <h1 className="text-3xl font-display font-bold tracking-tighter uppercase">Platform Guard</h1>
+            <h1 className="text-3xl font-display font-bold tracking-tighter uppercase">{config.siteName || "Platform"} Guard</h1>
             <p className="text-slate-500 text-sm">Access to internal controls is restricted to verified administrators.</p>
           </div>
           <button 
@@ -260,6 +260,43 @@ export default function Admin() {
         >
           {activeTab === 'identity' && (
             <div className="grid md:grid-cols-2 gap-8">
+              {/* Brand Configuration Card */}
+              <section className="col-span-full p-8 rounded-[32px] bg-white/5 border border-white/10 backdrop-blur-xl space-y-6">
+                <div className="flex items-center gap-3">
+                  <Sparkles className="w-5 h-5 text-indigo-400" />
+                  <h2 className="font-bold uppercase tracking-widest text-[10px] text-slate-500">Global Brand Identity</h2>
+                </div>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Platform / Company Name</label>
+                      <span className="text-[8px] text-slate-400 font-mono">Header & Document Title</span>
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="e.g. Blind Pharma"
+                      value={localConfig.siteName || ""}
+                      onChange={(e) => setLocalConfig({...localConfig, siteName: e.target.value})}
+                      className="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors text-white font-semibold text-sm"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Single Letter Logo Icon</label>
+                      <span className="text-[8px] text-slate-400 font-mono">Navigation Circle badge</span>
+                    </div>
+                    <input
+                      type="text"
+                      maxLength={1}
+                      placeholder="e.g. B"
+                      value={localConfig.logoLetter || ""}
+                      onChange={(e) => setLocalConfig({...localConfig, logoLetter: e.target.value.toUpperCase()})}
+                      className="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors text-indigo-400 font-bold text-center text-sm"
+                    />
+                  </div>
+                </div>
+              </section>
+
               <section className="p-8 rounded-[32px] bg-white/5 border border-white/10 backdrop-blur-xl space-y-6">
                 <div className="flex items-center gap-3 mb-2">
                   <Type className="w-5 h-5 text-indigo-400" />
@@ -318,15 +355,16 @@ export default function Admin() {
                         <select
                           value={localConfig.displayFont}
                           onChange={(e) => setLocalConfig({...localConfig, displayFont: e.target.value})}
-                          className="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors appearance-none text-sm font-semibold text-white"
+                          className="w-full border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors appearance-none text-sm font-semibold text-white"
+                          style={{ color: '#ffffff', backgroundColor: '#0f172a' }}
                         >
-                          <option value="Outfit" className="bg-slate-950 text-white" style={{ fontFamily: '"Outfit", sans-serif' }}>Outfit (Staje Default)</option>
-                          <option value="Inter" className="bg-slate-950 text-white" style={{ fontFamily: '"Inter", sans-serif' }}>Inter (Swiss Minimal)</option>
-                          <option value="Plus Jakarta Sans" className="bg-slate-950 text-white" style={{ fontFamily: '"Plus Jakarta Sans", sans-serif' }}>Plus Jakarta (Premium Geometry)</option>
-                          <option value="Space Grotesk" className="bg-slate-950 text-white" style={{ fontFamily: '"Space Grotesk", sans-serif' }}>Space Grotesk (Neo-Future)</option>
-                          <option value="Playfair Display" className="bg-slate-950 text-white" style={{ fontFamily: '"Playfair Display", serif' }}>Playfair (Editorial Serif)</option>
-                          <option value="Syne" className="bg-slate-950 text-white" style={{ fontFamily: '"Syne", sans-serif' }}>Syne (Artistic Display)</option>
-                          <option value="Space Mono" className="bg-slate-950 text-white" style={{ fontFamily: '"Space Mono", monospace' }}>Space Mono (Utility Code)</option>
+                          <option value="Outfit" className="bg-slate-900 text-white" style={{ color: '#ffffff', backgroundColor: '#0f172a', fontFamily: '"Outfit", sans-serif' }}>Outfit (Default)</option>
+                          <option value="Inter" className="bg-slate-900 text-white" style={{ color: '#ffffff', backgroundColor: '#0f172a', fontFamily: '"Inter", sans-serif' }}>Inter (Swiss Minimal)</option>
+                          <option value="Plus Jakarta Sans" className="bg-slate-900 text-white" style={{ color: '#ffffff', backgroundColor: '#0f172a', fontFamily: '"Plus Jakarta Sans", sans-serif' }}>Plus Jakarta (Geometry)</option>
+                          <option value="Space Grotesk" className="bg-slate-900 text-white" style={{ color: '#ffffff', backgroundColor: '#0f172a', fontFamily: '"Space Grotesk", sans-serif' }}>Space Grotesk (Neo-Future)</option>
+                          <option value="Playfair Display" className="bg-slate-900 text-white" style={{ color: '#ffffff', backgroundColor: '#0f172a', fontFamily: '"Playfair Display", serif' }}>Playfair (Editorial Serif)</option>
+                          <option value="Syne" className="bg-slate-900 text-white" style={{ color: '#ffffff', backgroundColor: '#0f172a', fontFamily: '"Syne", sans-serif' }}>Syne (Artistic Display)</option>
+                          <option value="Space Mono" className="bg-slate-900 text-white" style={{ color: '#ffffff', backgroundColor: '#0f172a', fontFamily: '"Space Mono", monospace' }}>Space Mono (Utility Code)</option>
                         </select>
                         <Type className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
                       </div>
@@ -334,7 +372,7 @@ export default function Admin() {
                         style={{ fontFamily: `"${localConfig.displayFont || 'Outfit'}", sans-serif` }}
                         className="text-[10px] text-indigo-400 font-bold tracking-wide leading-none mt-2 truncate transition-all duration-300"
                       >
-                        ABC•123•Staje Platform
+                        ABC•123•Platform Brand
                       </p>
                     </div>
 
@@ -344,13 +382,14 @@ export default function Admin() {
                         <select
                           value={localConfig.bodyFont || "Inter"}
                           onChange={(e) => setLocalConfig({...localConfig, bodyFont: e.target.value})}
-                          className="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors appearance-none text-sm font-semibold text-white"
+                          className="w-full border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500/50 transition-colors appearance-none text-sm font-semibold text-white"
+                          style={{ color: '#ffffff', backgroundColor: '#0f172a' }}
                         >
-                          <option value="Inter" className="bg-slate-950 text-white" style={{ fontFamily: '"Inter", sans-serif' }}>Inter (Swiss Minimal)</option>
-                          <option value="Outfit" className="bg-slate-950 text-white" style={{ fontFamily: '"Outfit", sans-serif' }}>Outfit (Modern Sans)</option>
-                          <option value="Plus Jakarta Sans" className="bg-slate-950 text-white" style={{ fontFamily: '"Plus Jakarta Sans", sans-serif' }}>Plus Jakarta (Premium Geometry)</option>
-                          <option value="Space Grotesk" className="bg-slate-950 text-white" style={{ fontFamily: '"Space Grotesk", sans-serif' }}>Space Grotesk (Neo-Future)</option>
-                          <option value="Space Mono" className="bg-slate-950 text-white" style={{ fontFamily: '"Space Mono", monospace' }}>Space Mono (Utility Code)</option>
+                          <option value="Inter" className="bg-slate-900 text-white" style={{ color: '#ffffff', backgroundColor: '#0f172a', fontFamily: '"Inter", sans-serif' }}>Inter (Swiss Minimal)</option>
+                          <option value="Outfit" className="bg-slate-900 text-white" style={{ color: '#ffffff', backgroundColor: '#0f172a', fontFamily: '"Outfit", sans-serif' }}>Outfit (Modern Sans)</option>
+                          <option value="Plus Jakarta Sans" className="bg-slate-900 text-white" style={{ color: '#ffffff', backgroundColor: '#0f172a', fontFamily: '"Plus Jakarta Sans", sans-serif' }}>Plus Jakarta (Geometry)</option>
+                          <option value="Space Grotesk" className="bg-slate-900 text-white" style={{ color: '#ffffff', backgroundColor: '#0f172a', fontFamily: '"Space Grotesk", sans-serif' }}>Space Grotesk (Neo-Future)</option>
+                          <option value="Space Mono" className="bg-slate-900 text-white" style={{ color: '#ffffff', backgroundColor: '#0f172a', fontFamily: '"Space Mono", monospace' }}>Space Mono (Utility Code)</option>
                         </select>
                         <Type className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
                       </div>
@@ -373,13 +412,13 @@ export default function Admin() {
                         <select
                           value={localConfig.heroTitleSize || "large"}
                           onChange={(e) => setLocalConfig({...localConfig, heroTitleSize: e.target.value})}
-                          className="w-full bg-slate-905 border border-white/10 rounded-lg px-2 py-2 focus:outline-none focus:border-indigo-500/50 text-[11px] font-bold tracking-wider uppercase text-slate-300"
-                          style={{ backgroundColor: '#0f172a' }}
+                          className="w-full border border-white/10 rounded-lg px-2 py-2 focus:outline-none focus:border-indigo-500/50 text-[11px] font-bold tracking-wider uppercase text-white cursor-pointer"
+                          style={{ color: '#ffffff', backgroundColor: '#0f172a' }}
                         >
-                          <option value="small" className="bg-slate-950 text-white">Compact</option>
-                          <option value="normal" className="bg-slate-950 text-white">Standard</option>
-                          <option value="large" className="bg-slate-950 text-white">Large</option>
-                          <option value="epic" className="bg-slate-950 text-white">Epic Scale</option>
+                          <option value="small" className="bg-slate-900 text-white" style={{ color: '#ffffff', backgroundColor: '#0f172a' }}>Compact</option>
+                          <option value="normal" className="bg-slate-900 text-white" style={{ color: '#ffffff', backgroundColor: '#0f172a' }}>Standard</option>
+                          <option value="large" className="bg-slate-900 text-white" style={{ color: '#ffffff', backgroundColor: '#0f172a' }}>Large</option>
+                          <option value="epic" className="bg-slate-900 text-white" style={{ color: '#ffffff', backgroundColor: '#0f172a' }}>Epic Scale</option>
                         </select>
                       </div>
 
@@ -388,13 +427,13 @@ export default function Admin() {
                         <select
                           value={localConfig.heroSubtitleSize || "normal"}
                           onChange={(e) => setLocalConfig({...localConfig, heroSubtitleSize: e.target.value})}
-                          className="w-full bg-slate-905 border border-white/10 rounded-lg px-2 py-2 focus:outline-none focus:border-indigo-500/50 text-[11px] font-bold tracking-wider uppercase text-slate-300"
-                          style={{ backgroundColor: '#0f172a' }}
+                          className="w-full border border-white/10 rounded-lg px-2 py-2 focus:outline-none focus:border-indigo-500/50 text-[11px] font-bold tracking-wider uppercase text-white cursor-pointer"
+                          style={{ color: '#ffffff', backgroundColor: '#0f172a' }}
                         >
-                          <option value="small" className="bg-slate-950 text-white">Small (16px)</option>
-                          <option value="normal" className="bg-slate-950 text-white">Normal (20px)</option>
-                          <option value="large" className="bg-slate-950 text-white">Large (24px)</option>
-                          <option value="xlarge" className="bg-slate-950 text-white">Extra (30px)</option>
+                          <option value="small" className="bg-slate-900 text-white" style={{ color: '#ffffff', backgroundColor: '#0f172a' }}>Small (16px)</option>
+                          <option value="normal" className="bg-slate-900 text-white" style={{ color: '#ffffff', backgroundColor: '#0f172a' }}>Normal (20px)</option>
+                          <option value="large" className="bg-slate-900 text-white" style={{ color: '#ffffff', backgroundColor: '#0f172a' }}>Large (24px)</option>
+                          <option value="xlarge" className="bg-slate-900 text-white" style={{ color: '#ffffff', backgroundColor: '#0f172a' }}>Extra (30px)</option>
                         </select>
                       </div>
 
@@ -403,12 +442,12 @@ export default function Admin() {
                         <select
                           value={localConfig.bodyFontSize || "normal"}
                           onChange={(e) => setLocalConfig({...localConfig, bodyFontSize: e.target.value})}
-                          className="w-full bg-slate-905 border border-white/10 rounded-lg px-2 py-2 focus:outline-none focus:border-indigo-500/50 text-[11px] font-bold tracking-wider uppercase text-slate-300"
-                          style={{ backgroundColor: '#0f172a' }}
+                          className="w-full border border-white/10 rounded-lg px-2 py-2 focus:outline-none focus:border-indigo-500/50 text-[11px] font-bold tracking-wider uppercase text-white cursor-pointer"
+                          style={{ color: '#ffffff', backgroundColor: '#0f172a' }}
                         >
-                          <option value="small" className="bg-slate-950 text-white">Compact (15px)</option>
-                          <option value="normal" className="bg-slate-950 text-white">Balanced (16px)</option>
-                          <option value="large" className="bg-slate-950 text-white">Spacious (18px)</option>
+                          <option value="small" className="bg-slate-900 text-white" style={{ color: '#ffffff', backgroundColor: '#0f172a' }}>Compact (15px)</option>
+                          <option value="normal" className="bg-slate-900 text-white" style={{ color: '#ffffff', backgroundColor: '#0f172a' }}>Balanced (16px)</option>
+                          <option value="large" className="bg-slate-900 text-white" style={{ color: '#ffffff', backgroundColor: '#0f172a' }}>Spacious (18px)</option>
                         </select>
                       </div>
                     </div>

@@ -35,31 +35,49 @@ service cloud.firestore {
       return data.keys().hasAll(['title', 'description', 'imageUrl']) &&
              data.title is string && data.title.size() <= 100 &&
              data.description is string && data.description.size() <= 1000 &&
-             data.imageUrl is string && data.imageUrl.size() <= 500 &&
+             data.imageUrl is string && data.imageUrl.size() <= 600 &&
              (!('features' in data) || data.features is list) &&
              (!('appleLink' in data) || data.appleLink is string) &&
              (!('googleLink' in data) || data.googleLink is string) &&
-             (!('order' in data) || data.order is number);
+             (!('order' in data) || data.order is number) &&
+             (!('tenant' in data) || (data.tenant is string && data.tenant.size() <= 50)) &&
+             (!('id' in data) || (data.id is string && data.id.size() <= 50));
     }
 
     function isValidSiteConfig(data) {
       return data.keys().hasAll(['heroTitle', 'heroSubtitle', 'contactEmail']) &&
              data.heroTitle is string && data.heroTitle.size() <= 100 &&
-             data.heroSubtitle is string && data.heroSubtitle.size() <= 1000 &&
-             data.contactEmail is string && data.contactEmail.size() <= 100;
+             data.heroSubtitle is string && data.heroSubtitle.size() <= 1200 &&
+             data.contactEmail is string && data.contactEmail.size() <= 100 &&
+             (!('siteName' in data) || (data.siteName is string && data.siteName.size() <= 100)) &&
+             (!('logoLetter' in data) || (data.logoLetter is string && data.logoLetter.size() <= 10)) &&
+             (!('displayFont' in data) || (data.displayFont is string && data.displayFont.size() <= 100)) &&
+             (!('bodyFont' in data) || (data.bodyFont is string && data.bodyFont.size() <= 100)) &&
+             (!('heroTitleSize' in data) || (data.heroTitleSize is string && data.heroTitleSize.size() <= 50)) &&
+             (!('heroSubtitleSize' in data) || (data.heroSubtitleSize is string && data.heroSubtitleSize.size() <= 50)) &&
+             (!('bodyFontSize' in data) || (data.bodyFontSize is string && data.bodyFontSize.size() <= 50)) &&
+             (!('footerTwitter' in data) || (data.footerTwitter is string && data.footerTwitter.size() <= 200)) &&
+             (!('footerLinkedin' in data) || (data.footerLinkedin is string && data.footerLinkedin.size() <= 200)) &&
+             (!('footerGithub' in data) || (data.footerGithub is string && data.footerGithub.size() <= 200)) &&
+             (!('footerCopyright' in data) || (data.footerCopyright is string && data.footerCopyright.size() <= 200)) &&
+             (!('aboutTitle' in data) || (data.aboutTitle is string && data.aboutTitle.size() <= 200)) &&
+             (!('aboutSubtitle' in data) || (data.aboutSubtitle is string && data.aboutSubtitle.size() <= 1250)) &&
+             (!('aboutItems' in data) || data.aboutItems is list) &&
+             (!('heroAccent' in data) || (data.heroAccent is string && data.heroAccent.size() <= 100)) &&
+             (!('heroImageUrl' in data) || (data.heroImageUrl is string && data.heroImageUrl.size() <= 500));
     }
 
     // 4. Match Blocks
-    match /config/site {
+    match /config/{configId} {
       allow read: if true;
-      allow write: if isAdmin() && isValidSiteConfig(incoming());
+      allow write: if isAdmin() && isValidId(configId) && isValidSiteConfig(incoming());
     }
 
     match /apps/{appId} {
       allow read: if true;
       allow get: if isValidId(appId);
       allow create: if isAdmin() && isValidId(appId) && isValidApp(incoming()) &&
-                    incoming().keys().size() <= 8; // Adjust based on properties
+                    incoming().keys().size() <= 11; // Adjusted key limit to accommodate tenant and other optional properties
       allow update: if isAdmin() && isValidId(appId) && isValidApp(incoming());
       allow delete: if isAdmin() && isValidId(appId);
     }

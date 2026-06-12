@@ -24,10 +24,10 @@ export default function Privacy() {
       content: (
         <div className="space-y-4">
           <p className="leading-relaxed text-slate-300">
-            Welcome to the <strong>Staje Platform</strong> Privacy Policy. Staje is dedicated to building, hosting, and showcasing purpose-built mobile utilities and custom software architectures. We respect your digital boundaries, value your privacy, and design our ecosystem to keep you in control of your personal data.
+            Welcome to the <strong>{config.siteName || "Staje"} Platform</strong> Privacy Policy. We are dedicated to building, hosting, and showcasing purpose-built mobile utilities and custom software architectures. We respect your digital boundaries, value your privacy, and design our ecosystem to keep you in control of your personal data.
           </p>
           <p className="leading-relaxed text-slate-300">
-            This Policy covers all mobile applications conceived by Staje and distributed through the <strong>Google Play Store</strong> and <strong>Apple App Store</strong>, as well as the website staje.com.
+            This Policy covers all mobile applications conceived by our platform and distributed through the <strong>Google Play Store</strong> and <strong>Apple App Store</strong>, as well as our primary web interface.
           </p>
           <p className="leading-relaxed text-slate-300">
             We hold a strong belief that software should perform its core tasks beautifully without harvesting user identities. Our collection is designed from the ground up to minimize data collection.
@@ -129,7 +129,7 @@ export default function Privacy() {
             For suggestions, inquiries, legal claims, or general questions regarding our data operations, reach out directly to the platform management:
           </p>
           <div className="p-6 rounded-2xl bg-white/5 border border-white/10 space-y-2">
-            <h4 className="font-semibold text-white">Staje Platform Administration</h4>
+            <h4 className="font-semibold text-white">{config.siteName || "Staje"} Platform Administration</h4>
             <p className="text-sm text-slate-300">Primary Liaison: System Administrator</p>
             <p className="text-sm text-slate-300">
               Email Endpoint: <a href={`mailto:${config.contactEmail}`} className="text-indigo-400 hover:underline font-mono">{config.contactEmail}</a>
@@ -152,8 +152,8 @@ export default function Privacy() {
           <span className="text-sm font-medium tracking-wide uppercase font-sans">Back to Home</span>
         </Link>
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded bg-gradient-to-br from-indigo-400 to-cyan-400 flex items-center justify-center font-display font-bold text-xs text-white">S</div>
-          <span className="font-display font-bold text-sm tracking-tighter text-white">STAJE</span>
+          <div className="w-6 h-6 rounded bg-gradient-to-br from-indigo-400 to-cyan-400 flex items-center justify-center font-display font-bold text-xs text-white">{config.logoLetter || "S"}</div>
+          <span className="font-display font-bold text-sm tracking-tighter text-white uppercase">{config.siteName || "STAJE"}</span>
         </div>
       </nav>
 

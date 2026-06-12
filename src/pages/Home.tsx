@@ -27,8 +27,8 @@ export default function Home() {
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 px-6 py-6 md:px-12 flex justify-between items-center bg-transparent backdrop-blur-sm">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-400 to-cyan-400 flex items-center justify-center font-display font-bold text-white shadow-lg shadow-indigo-500/20">S</div>
-          <span className="font-display font-bold text-xl tracking-tighter">STAJE</span>
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-400 to-cyan-400 flex items-center justify-center font-display font-bold text-white shadow-lg shadow-indigo-500/20">{config.logoLetter || "S"}</div>
+          <span className="font-display font-bold text-xl tracking-tighter uppercase">{config.siteName || "STAJE"}</span>
         </div>
         <div className="hidden md:flex items-center gap-8 text-sm font-medium tracking-wide text-white/60">
           <a href="#apps" className="hover:text-white transition-colors">APPS</a>
@@ -181,11 +181,11 @@ export default function Home() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-12">
           <div className="space-y-6">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-400 to-cyan-400 flex items-center justify-center font-display font-bold text-white shadow-lg shadow-indigo-500/20">S</div>
-              <span className="font-display font-bold text-2xl tracking-tighter">STAJE</span>
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-400 to-cyan-400 flex items-center justify-center font-display font-bold text-white shadow-lg shadow-indigo-500/20">{config.logoLetter || "S"}</div>
+              <span className="font-display font-bold text-2xl tracking-tighter uppercase">{config.siteName || "STAJE"}</span>
             </div>
             <p className="text-slate-500 max-w-xs text-xs leading-relaxed font-medium uppercase tracking-wide">
-              Conceived by Staje Platform • Internal Utility Network
+              Conceived by {config.siteName || "STAJE"} Platform • Internal Utility Network
             </p>
             <div className="flex gap-4">
               {config.footerTwitter && (

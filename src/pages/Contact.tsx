@@ -96,8 +96,8 @@ export default function Contact() {
           <span className="text-sm font-medium tracking-wide uppercase font-sans">Back to Home</span>
         </Link>
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded bg-gradient-to-br from-indigo-400 to-cyan-400 flex items-center justify-center font-display font-bold text-xs text-white">S</div>
-          <span className="font-display font-bold text-sm tracking-tighter text-white">STAJE</span>
+          <div className="w-6 h-6 rounded bg-gradient-to-br from-indigo-400 to-cyan-400 flex items-center justify-center font-display font-bold text-xs text-white">{config.logoLetter || "S"}</div>
+          <span className="font-display font-bold text-sm tracking-tighter text-white uppercase">{config.siteName || "STAJE"}</span>
         </div>
       </nav>
 
@@ -110,9 +110,9 @@ export default function Contact() {
               <Sparkles className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
               Direct Liaison
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold tracking-tight leading-none text-white">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold tracking-tight leading-none text-white animate-[fadeIn_0.5s_ease-out]">
               Connect <br/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-cyan-400">With Staje</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-cyan-400">With {config.siteName || "Staje"}</span>
             </h1>
             <p className="text-slate-400 leading-relaxed font-light text-base md:text-lg">
               Have inquiries about an application, developer partnerships, or want to trigger a privacy data deletion mandate? Send a direct dispatch below.
